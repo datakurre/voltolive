@@ -1,0 +1,454 @@
+{
+    "current_program_scene": "Screen Capture",
+    "current_scene": "Screen Capture",
+    "current_transition": "Fade",
+    "groups": [],
+    "modules": {
+        "auto-scene-switcher": {
+            "active": false,
+            "interval": 300,
+            "non_matching_scene": "",
+            "switch_if_not_matching": false,
+            "switches": []
+        },
+        "decklink_captions": {
+            "source": ""
+        },
+        "output-timer": {
+            "autoStartRecordTimer": false,
+            "autoStartStreamTimer": false,
+            "pauseRecordTimer": true,
+            "recordTimerHours": 0,
+            "recordTimerMinutes": 0,
+            "recordTimerSeconds": 30,
+            "streamTimerHours": 0,
+            "streamTimerMinutes": 0,
+            "streamTimerSeconds": 30
+        },
+        "scripts-tool": []
+    },
+    "name": "Untitled",
+    "preview_locked": false,
+    "quick_transitions": [
+        {
+            "duration": 300,
+            "fade_to_black": false,
+            "hotkeys": [],
+            "id": 1,
+            "name": "Cut"
+        },
+        {
+            "duration": 300,
+            "fade_to_black": false,
+            "hotkeys": [],
+            "id": 2,
+            "name": "Fade"
+        },
+        {
+            "duration": 300,
+            "fade_to_black": true,
+            "hotkeys": [],
+            "id": 3,
+            "name": "Fade"
+        }
+    ],
+    "saved_projectors": [],
+    "scaling_enabled": true,
+    "scaling_level": 0,
+    "scaling_off_x": 0.0,
+    "scaling_off_y": 0.0,
+    "scene_order": [
+        {
+            "name": "Screen Capture"
+        },
+        {
+            "name": "Group Portrait View"
+        },
+        {
+            "name": "Screen + Portraits"
+        }
+    ],
+    "sources": [
+        {
+            "balance": 0.5,
+            "deinterlace_field_order": 0,
+            "deinterlace_mode": 0,
+            "enabled": true,
+            "flags": 0,
+            "hotkeys": {
+                "OBSBasic.SelectScene": [
+                    {
+                        "control": true,
+                        "key": "OBS_KEY_C"
+                    }
+                ],
+                "libobs.hide_scene_item.Browser": [],
+                "libobs.hide_scene_item.Browser 2": [],
+                "libobs.hide_scene_item.Display Capture": [],
+                "libobs.show_scene_item.Browser": [],
+                "libobs.show_scene_item.Browser 2": [],
+                "libobs.show_scene_item.Display Capture": []
+            },
+            "id": "scene",
+            "mixers": 0,
+            "monitoring_type": 0,
+            "muted": false,
+            "name": "Screen + Portraits",
+            "prev_ver": 436273154,
+            "private_settings": {},
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "settings": {
+                "custom_size": false,
+                "id_counter": 3,
+                "items": [
+                    {
+                        "align": 5,
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "bounds_align": 0,
+                        "bounds_type": 0,
+                        "crop_bottom": 0,
+                        "crop_left": 0,
+                        "crop_right": 0,
+                        "crop_top": 0,
+                        "group_item_backup": false,
+                        "id": 1,
+                        "locked": false,
+                        "name": "Display Capture",
+                        "pos": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "private_settings": {},
+                        "rot": 0.0,
+                        "scale": {
+                            "x": 0.5,
+                            "y": 0.5
+                        },
+                        "scale_filter": "disable",
+                        "visible": true
+                    },
+                    {
+                        "align": 5,
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "bounds_align": 0,
+                        "bounds_type": 0,
+                        "crop_bottom": 73,
+                        "crop_left": 185,
+                        "crop_right": 119,
+                        "crop_top": 71,
+                        "group_item_backup": false,
+                        "id": 2,
+                        "locked": false,
+                        "name": "Browser 2",
+                        "pos": {
+                            "x": 24.0,
+                            "y": 33.0
+                        },
+                        "private_settings": {},
+                        "rot": 0.0,
+                        "scale": {
+                            "x": 0.50806450843811035,
+                            "y": 0.50877195596694946
+                        },
+                        "scale_filter": "disable",
+                        "visible": true
+                    },
+                    {
+                        "align": 5,
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "bounds_align": 0,
+                        "bounds_type": 0,
+                        "crop_bottom": 69,
+                        "crop_left": 133,
+                        "crop_right": 130,
+                        "crop_top": 68,
+                        "group_item_backup": false,
+                        "id": 3,
+                        "locked": false,
+                        "name": "Browser",
+                        "pos": {
+                            "x": 982.0,
+                            "y": 545.0
+                        },
+                        "private_settings": {},
+                        "rot": 0.0,
+                        "scale": {
+                            "x": 0.50465548038482666,
+                            "y": 0.50539958477020264
+                        },
+                        "scale_filter": "disable",
+                        "visible": true
+                    }
+                ]
+            },
+            "sync": 0,
+            "versioned_id": "scene",
+            "volume": 1.0
+        },
+        {
+            "balance": 0.5,
+            "deinterlace_field_order": 0,
+            "deinterlace_mode": 0,
+            "enabled": true,
+            "flags": 0,
+            "hotkeys": {
+                "libobs.mute": [],
+                "libobs.push-to-mute": [],
+                "libobs.push-to-talk": [],
+                "libobs.unmute": []
+            },
+            "id": "browser_source",
+            "mixers": 255,
+            "monitoring_type": 0,
+            "muted": false,
+            "name": "Browser 2",
+            "prev_ver": 436273154,
+            "private_settings": {},
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "settings": {
+                "css": "",
+                "reroute_audio": true,
+                "url": "https://obs.ninja/?view=wSrKzQ9&scene&room=SuperSecretVoltoLive&password=123123"
+            },
+            "sync": 0,
+            "versioned_id": "browser_source",
+            "volume": 1.0
+        },
+        {
+            "balance": 0.5,
+            "deinterlace_field_order": 0,
+            "deinterlace_mode": 0,
+            "enabled": true,
+            "flags": 0,
+            "hotkeys": {
+                "libobs.mute": [],
+                "libobs.push-to-mute": [],
+                "libobs.push-to-talk": [],
+                "libobs.unmute": []
+            },
+            "id": "browser_source",
+            "mixers": 255,
+            "monitoring_type": 0,
+            "muted": false,
+            "name": "Browser",
+            "prev_ver": 436273154,
+            "private_settings": {},
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "settings": {
+                "css": "",
+                "height": 600,
+                "reroute_audio": true,
+                "url": "https://obs.ninja/?view=Qn9ZRQu&scene&room=SuperSecretVoltoLive&password=123123"
+            },
+            "sync": 0,
+            "versioned_id": "browser_source",
+            "volume": 1.0
+        },
+        {
+            "balance": 0.5,
+            "deinterlace_field_order": 0,
+            "deinterlace_mode": 0,
+            "enabled": true,
+            "flags": 0,
+            "hotkeys": {
+                "OBSBasic.SelectScene": [
+                    {
+                        "control": true,
+                        "key": "OBS_KEY_X"
+                    }
+                ],
+                "libobs.hide_scene_item.Browser": [],
+                "libobs.hide_scene_item.Browser 2": [],
+                "libobs.show_scene_item.Browser": [],
+                "libobs.show_scene_item.Browser 2": []
+            },
+            "id": "scene",
+            "mixers": 0,
+            "monitoring_type": 0,
+            "muted": false,
+            "name": "Group Portrait View",
+            "prev_ver": 436273154,
+            "private_settings": {},
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "settings": {
+                "custom_size": false,
+                "id_counter": 2,
+                "items": [
+                    {
+                        "align": 5,
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "bounds_align": 0,
+                        "bounds_type": 0,
+                        "crop_bottom": 69,
+                        "crop_left": 133,
+                        "crop_right": 130,
+                        "crop_top": 68,
+                        "group_item_backup": false,
+                        "id": 1,
+                        "locked": false,
+                        "name": "Browser",
+                        "pos": {
+                            "x": 689.0,
+                            "y": 169.0
+                        },
+                        "private_settings": {},
+                        "rot": 0.0,
+                        "scale": {
+                            "x": 0.91433894634246826,
+                            "y": 0.91360688209533691
+                        },
+                        "scale_filter": "disable",
+                        "visible": true
+                    },
+                    {
+                        "align": 5,
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "bounds_align": 0,
+                        "bounds_type": 0,
+                        "crop_bottom": 73,
+                        "crop_left": 185,
+                        "crop_right": 119,
+                        "crop_top": 71,
+                        "group_item_backup": false,
+                        "id": 2,
+                        "locked": false,
+                        "name": "Browser 2",
+                        "pos": {
+                            "x": 120.0,
+                            "y": 175.0
+                        },
+                        "private_settings": {},
+                        "rot": 0.0,
+                        "scale": {
+                            "x": 0.90322577953338623,
+                            "y": 0.90350878238677979
+                        },
+                        "scale_filter": "disable",
+                        "visible": true
+                    }
+                ]
+            },
+            "sync": 0,
+            "versioned_id": "scene",
+            "volume": 1.0
+        },
+        {
+            "balance": 0.5,
+            "deinterlace_field_order": 0,
+            "deinterlace_mode": 0,
+            "enabled": true,
+            "flags": 0,
+            "hotkeys": {},
+            "id": "display_capture",
+            "mixers": 0,
+            "monitoring_type": 0,
+            "muted": false,
+            "name": "Display Capture",
+            "prev_ver": 436273154,
+            "private_settings": {},
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "settings": {},
+            "sync": 0,
+            "versioned_id": "display_capture",
+            "volume": 1.0
+        },
+        {
+            "balance": 0.5,
+            "deinterlace_field_order": 0,
+            "deinterlace_mode": 0,
+            "enabled": true,
+            "flags": 0,
+            "hotkeys": {
+                "OBSBasic.SelectScene": [
+                    {
+                        "control": true,
+                        "key": "OBS_KEY_Z"
+                    }
+                ],
+                "libobs.hide_scene_item.Display Capture": [],
+                "libobs.show_scene_item.Display Capture": []
+            },
+            "id": "scene",
+            "mixers": 0,
+            "monitoring_type": 0,
+            "muted": false,
+            "name": "Screen Capture",
+            "prev_ver": 436273154,
+            "private_settings": {},
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "settings": {
+                "custom_size": false,
+                "id_counter": 22,
+                "items": [
+                    {
+                        "align": 5,
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "bounds_align": 0,
+                        "bounds_type": 0,
+                        "crop_bottom": 0,
+                        "crop_left": 0,
+                        "crop_right": 0,
+                        "crop_top": 0,
+                        "group_item_backup": false,
+                        "id": 22,
+                        "locked": false,
+                        "name": "Display Capture",
+                        "pos": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "private_settings": {},
+                        "rot": 0.0,
+                        "scale": {
+                            "x": 0.5,
+                            "y": 0.5
+                        },
+                        "scale_filter": "disable",
+                        "visible": true
+                    }
+                ]
+            },
+            "sync": 0,
+            "versioned_id": "scene",
+            "volume": 1.0
+        }
+    ],
+    "transition_duration": 300,
+    "transitions": []
+}
