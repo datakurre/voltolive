@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 
 const HEADERS = ['content-type', 'content-disposition', 'cache-control'];
 
+// ExpressJS body parser
 const jsonParser = bodyParser.json();
 
 function AsyncWorker(req, res, next) {
@@ -99,12 +100,12 @@ const poll = async (token) => {
 };
 
 export default function () {
-  const router = express.Router();
-
   // middleware.all(['**/@asyncworker'], AsyncWorker);
   // middleware.id = 'AsyncWorker';
 
+  const router = express.Router();
   router.post('/@taskqueue', jsonParser, (req, res) => {
+
 /* 
 
 POST /@taskqueue HTTP/1.1

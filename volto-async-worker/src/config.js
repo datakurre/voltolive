@@ -23,6 +23,8 @@ const serverConfig =
 
 export default function applyConfig(config) {
   // Add here your project's configuration here by modifying `config` accordingly
+  config.settings.ssrBackend = 'http://localhost:3000/';
+
   if (serverConfig) {
     config.settings.expressMiddleware = [
       ...config.settings.expressMiddleware,
