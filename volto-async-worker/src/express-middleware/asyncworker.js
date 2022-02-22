@@ -85,24 +85,15 @@ const poll_ = async () => {
   console.log(response.statusCode);
   console.log(response.body.items.length);
   for (const item of response.body.items) {
-    // TODO: take account task verb and possible body
-    //console.log(item.body);
-    //console.log(item.verb);
-    //console.log(item.headers);
-    //console.log(item.url);
 
-    // TODO: substitute URL with internalApiPath
-    console.log(item);
-    const request = superagent[item.method.token.toLowerCase()](formatUrl(item.portal_path));
+    const request = superagent[item.method.token](formatUrl(item.portal_path));
     request.set("Accept", "application/json")
     request.set("Content-Type", "application/json")
     request.send(item.body);
-    request.auth('admin', 'admin');
+    request.auth('admin', 'admin'); // TODO: collective.impersonate
     try {
       await request;
-    } catch {
-
-    }
+    } catch {}
 
     // Acknowledge the task with a workflow transition
     const ackUrl = item['@id'].replace(apiPath, `${apiPath}/++api++`) + `/@workflow/complete`;

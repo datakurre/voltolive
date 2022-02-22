@@ -70,7 +70,7 @@ class Api {
         let promise = new Promise((resolve, reject) => {
           if (async) {
             data = {
-              method: method.toUpperCase(),  // TODO: del to DELETE
+              method,
               portal_path: path,
               body: JSON.stringify(data),
             };
