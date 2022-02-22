@@ -5,10 +5,34 @@ import qs from 'query-string'
 import {flattenHTMLToAppURL} from '@plone/volto/helpers';
 import controller from './asyncworkertoken';
 import {createContent} from '@plone/volto/actions'
-import jwdecode from 'jwt-decode'
+import jwtDecode from 'jwt-decode';
 import bodyParser from 'body-parser';
+import cookie from 'react-cookie';
 
 const HEADERS = ['content-type', 'content-disposition', 'cache-control'];
+
+/**
+ * Format the url.
+ * @function formatUrl
+ * @param {string} path Path (or URL) to be formatted.
+ * @returns {string} Formatted path.
+ */
+function formatUrl(path) {
+  const { settings } = config;
+  const APISUFIX = settings.legacyTraverse ? '' : '/++api++';
+
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+
+  const adjustedPath = path[0] !== '/' ? `/${path}` : path;
+  let apiPath = '';
+  if (settings.internalApiPath && __SERVER__) {
+    apiPath = settings.internalApiPath;
+  } else if (settings.apiPath) {
+    apiPath = settings.apiPath;
+  }
+
+  return `${apiPath}${APISUFIX}${adjustedPath}`;
+}
 
 // ExpressJS body parser
 const jsonParser = bodyParser.json();
@@ -58,8 +82,8 @@ const poll_ = async () => {
     .set('Accept', 'application/json');
 
 
-  //console.log(response.statusCode);
-  //console.log(response.body.items.length);
+  console.log(response.statusCode);
+  console.log(response.body.items.length);
   for (const item of response.body.items) {
     // TODO: take account task verb and possible body
     //console.log(item.body);
@@ -68,9 +92,17 @@ const poll_ = async () => {
     //console.log(item.url);
 
     // TODO: substitute URL with internalApiPath
-    await superagent
-      .get(item.url)
-      .auth('admin', 'admin');
+    console.log(item);
+    const request = superagent[item.method.token.toLowerCase()](formatUrl(item.portal_path));
+    request.set("Accept", "application/json")
+    request.set("Content-Type", "application/json")
+    request.send(item.body);
+    request.auth('admin', 'admin');
+    try {
+      await request;
+    } catch {
+
+    }
 
     // Acknowledge the task with a workflow transition
     const ackUrl = item['@id'].replace(apiPath, `${apiPath}/++api++`) + `/@workflow/complete`;
@@ -104,7 +136,7 @@ export default function () {
   // middleware.id = 'AsyncWorker';
 
   const router = express.Router();
-  router.post('/@taskqueue', jsonParser, (req, res) => {
+  router.post('/@taskqueue', jsonParser, async (req, res) => {
 
 /* 
 
@@ -117,8 +149,8 @@ Content-Type: application/json
     "@type": "Task",
     "method": "POST",
     "path": "/plone/++api++/some-folder/@move",
-    "headers": {},
-    "body": "{\"source\": \"http://localhost:55001/plone/front-page\"}
+    "body": "{\"source\": \"http://localhost:55001/plone/front-page\"},
+    "user_id": "johndoe"
 }
 
 ---
@@ -127,8 +159,10 @@ HTTP/1.1 202 Accepted
 Location: /@taskqueue/id
 
 */
+
     let location;
     let apiPath = '';
+
     const { settings } = config;
 
     if (settings.internalApiPath && __SERVER__) {
@@ -138,33 +172,38 @@ Location: /@taskqueue/id
     } else {
       apiPath = settings.apiPath;
     }
-    
-    const params = {
-      path: "/Plone/task-queue",
-    };
-    console.log(req.body)
-    res.status(202);
-    res.set({'Location': location})
-    res.send({"status": "ok"})
-    return;
+
+    const authToken = cookie.load('auth_token');
+
+    console.log(req.body);
 
     const payload = {
-      '@type': 'Task',
-      "path": req.body.path,
-      method: req.body.method,
-      "user_id": jwdecode(req.headers.Authorization.replace('Bearer ', '')).sub,
-      "headers": {},
-      "body": req.body.body
-    }
+      ...req.body,
+      "@type": "task",
+      "user_id": jwtDecode(authToken).sub,
+      "title": req.body.portal_path,
+    };
+    const queuePath = "/task-queue";
+    const response = await superagent
+       .post(`${apiPath}${queuePath}`)
+       .set('Content-Type', 'application/json')
+       .set('Accept', 'application/json')
+       .send(payload)
+       .auth('admin', 'admin');
 
-    // const response = await superagent
-    //   .post(`${apiPath}${params.path}`)
-    //   .send(payload)
-    //   .auth('admin', 'admin');
+    // TODO: Check response?
 
     res.status(202);
     res.set({'Location': location})
+    res.send("")
   });
+
+//    console.log(req.body)
+//    res.status(202);
+//    res.set({'Location': location})
+//    res.send({"status": "ok"})
+//    return;
+
 
 
   // For MVP:
@@ -200,7 +239,7 @@ Content-Type: application/json
   // DELETE  /@taskqueue/id  -> returns 204 No Content
 
   controller.token = (new Date()).getTime();
-  // setTimeout(() => poll(controller.token), 1000);
+  setTimeout(() => poll(controller.token), 1000);
 
   return router;
 }

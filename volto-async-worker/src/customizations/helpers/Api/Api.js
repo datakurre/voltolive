@@ -33,6 +33,27 @@ function formatUrl(path) {
 }
 
 /**
+ * Format the async url.
+ * @function formatAsyncUrl
+ * @param {string} path Path (or URL) to be formatted.
+ * @returns {string} Formatted path.
+ */
+function formatAsyncUrl(path) {
+  const { settings } = config;
+  const APISUFIX = '';
+
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+
+  const adjustedPath = path[0] !== '/' ? `/${path}` : path;
+  let apiPath = '';
+  if (settings.apiPath) {
+    apiPath = settings.apiPath;
+  }
+
+  return `${apiPath}${APISUFIX}${adjustedPath}`;
+}
+
+/**
  * Api class.
  * @class Api
  */
@@ -47,10 +68,18 @@ class Api {
       this[method] = (path, { params, async, data, type, headers = {} } = {}) => {
         let request;
         let promise = new Promise((resolve, reject) => {
-          request = superagent[method](formatUrl(path));
-
           if (async) {
-            console.log("HERE BE ASYNC DRAGONS!");
+            data = {
+              method: method.toUpperCase(),  // TODO: del to DELETE
+              portal_path: path,
+              body: JSON.stringify(data),
+            };
+            request = superagent['post'](formatAsyncUrl("/@taskqueue"));
+
+            console.log(request, data);
+            // request = superagent[method](formatUrl(path));
+          } else {
+            request = superagent[method](formatUrl(path));
           }
 
           if (params) {
