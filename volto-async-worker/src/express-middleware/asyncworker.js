@@ -8,8 +8,22 @@ import {createContent} from '@plone/volto/actions'
 import jwtDecode from 'jwt-decode';
 import bodyParser from 'body-parser';
 import cookie from 'react-cookie';
+import * as webPush from 'web-push'
 
 const HEADERS = ['content-type', 'content-disposition', 'cache-control'];
+
+if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
+  console.log("You must set the VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY "+
+    "environment variables. You can use the following ones:");
+  console.log(webPush.generateVAPIDKeys());
+}
+
+// Set the keys used for encrypting the push messages.
+webPush.setVapidDetails(
+  'https://serviceworke.rs/',
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
 
 /**
  * Format the url.
@@ -127,6 +141,21 @@ export default function () {
   // middleware.id = 'AsyncWorker';
 
   const router = express.Router();
+  router.get('/@vapidPublicKey', async (req, res) => {
+    res.status(200);
+    res.send(process.env.VAPID_PUBLIC_KEY);
+  });
+
+  router.post('/@test-push-notification', jsonParser, async (req, res) => {
+    const subscription = req.body.subscription;
+    webPush.sendNotification(subscription)
+    .then(function() {
+      console.log('Push Application Server - Notification sent to ' + subscription.endpoint);
+    }).catch(function() {
+      console.log('ERROR in sending Notification, endpoint removed ' + subscription.endpoint);
+    });
+  });
+
   router.post('/@taskqueue', jsonParser, async (req, res) => {
 
 /* 
@@ -230,7 +259,7 @@ Content-Type: application/json
   // DELETE  /@taskqueue/id  -> returns 204 No Content
 
   controller.token = (new Date()).getTime();
-  setTimeout(() => poll(controller.token), 1000);
+  // setTimeout(() => poll(controller.token), 1000);
 
   return router;
 }

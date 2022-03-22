@@ -62,6 +62,10 @@ export function deleteContent(urls) {
  * @returns {Object} Update content action.
  */
 export function updateContent(urls, content, headers = {}) {
+  Notification?.requestPermission(); // NOTE: This return promise.
+
+  
+
   return {
     type: UPDATE_CONTENT,
     request:
