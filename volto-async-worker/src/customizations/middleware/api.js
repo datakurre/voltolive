@@ -144,7 +144,7 @@ export default (api) => ({ dispatch, getState }) => (next) => (action) => {
                 headers: item.headers,
                 params: request.params,
                 async: item.async,
-        }).then((reqres) => {
+              }).then((reqres) => {
                 return [...acc, reqres];
               });
             });
@@ -157,7 +157,7 @@ export default (api) => ({ dispatch, getState }) => (next) => (action) => {
                 headers: item.headers,
                 params: request.params,
                 async: item.async,
-        }),
+              }),
             ),
           )
       : api[request.op](addExpandersToPath(request.path, type), {

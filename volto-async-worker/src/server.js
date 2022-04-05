@@ -1,2 +1,2 @@
-import AsyncWorker from './express-middleware/asyncworker'
+import AsyncWorker from './express-middleware/asyncworker';
 export default [AsyncWorker()];

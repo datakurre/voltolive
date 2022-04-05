@@ -65,7 +65,10 @@ class Api {
    */
   constructor() {
     methods.forEach((method) => {
-      this[method] = (path, { params, async, data, type, headers = {} } = {}) => {
+      this[method] = (
+        path,
+        { params, async, data, type, headers = {} } = {},
+      ) => {
         let request;
         let promise = new Promise((resolve, reject) => {
           if (async) {
@@ -74,7 +77,7 @@ class Api {
               portal_path: path,
               body: JSON.stringify(data),
             };
-            request = superagent['post'](formatAsyncUrl("/@taskqueue"));
+            request = superagent['post'](formatAsyncUrl('/@taskqueue'));
 
             console.log(request, data);
             // request = superagent[method](formatUrl(path));

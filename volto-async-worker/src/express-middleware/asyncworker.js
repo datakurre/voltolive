@@ -1,20 +1,22 @@
 import express from 'express';
 import config from '@plone/volto/registry';
 import superagent from 'superagent';
-import qs from 'query-string'
-import {flattenHTMLToAppURL} from '@plone/volto/helpers';
+import qs from 'query-string';
+import { flattenHTMLToAppURL } from '@plone/volto/helpers';
 import controller from './asyncworkertoken';
-import {createContent} from '@plone/volto/actions'
+import { createContent } from '@plone/volto/actions';
 import jwtDecode from 'jwt-decode';
 import bodyParser from 'body-parser';
 import cookie from 'react-cookie';
-import * as webPush from 'web-push'
+import * as webPush from 'web-push';
 
 const HEADERS = ['content-type', 'content-disposition', 'cache-control'];
 
 if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
-  console.log("You must set the VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY "+
-    "environment variables. You can use the following ones:");
+  console.log(
+    'You must set the VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY ' +
+      'environment variables. You can use the following ones:',
+  );
   console.log(webPush.generateVAPIDKeys());
 }
 
@@ -22,7 +24,7 @@ if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
 webPush.setVapidDetails(
   'https://serviceworke.rs/',
   process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
+  process.env.VAPID_PRIVATE_KEY,
 );
 
 /**
@@ -52,7 +54,6 @@ function formatUrl(path) {
 const jsonParser = bodyParser.json();
 
 function AsyncWorker(req, res, next) {
-
   res.send('hello');
 
   // getAPIResourceWithAuth(req)
@@ -67,7 +68,7 @@ function AsyncWorker(req, res, next) {
   //   })
   //   .catch(next);
 }
- 
+
 const poll_ = async () => {
   const { settings } = config;
   const APISUFIX = settings.legacyTraverse ? '' : '/++api++';
@@ -83,26 +84,24 @@ const poll_ = async () => {
 
   // TODO: Read admin credentials from environment variable or something
   // const authorization = `Basic ${btoa("admin:admin")}`;
-  const path = "/@search";
+  const path = '/@search';
   const params = {
-    path: "/Plone/task-queue",
-    review_state: "todo",
-    fullobjects: "1",
-    b_size: "1",
+    path: '/Plone/task-queue',
+    review_state: 'todo',
+    fullobjects: '1',
+    b_size: '1',
   };
   const response = await superagent
     .get(`${apiPath}${APISUFIX}${path}?${qs.stringify(params)}`)
     .auth('admin', 'admin')
     .set('Accept', 'application/json');
 
-
   console.log(response.statusCode);
   console.log(response.body.items.length);
   for (const item of response.body.items) {
-
     const request = superagent[item.method.token](formatUrl(item.portal_path));
-    request.set("Accept", "application/json")
-    request.set("Content-Type", "application/json")
+    request.set('Accept', 'application/json');
+    request.set('Content-Type', 'application/json');
     request.send(item.body);
     request.auth('admin', 'admin'); // TODO: collective.impersonate
     try {
@@ -110,14 +109,14 @@ const poll_ = async () => {
     } catch {}
 
     // Acknowledge the task with a workflow transition
-    const ackUrl = item['@id'].replace(apiPath, `${apiPath}/++api++`) + `/@workflow/complete`;
+    const ackUrl =
+      item['@id'].replace(apiPath, `${apiPath}/++api++`) +
+      `/@workflow/complete`;
     //console.log(ackUrl)
     // request = superagent[method](formatUrl(path));
-    await superagent
-      .post(ackUrl)
-      .auth('admin', 'admin');
+    await superagent.post(ackUrl).auth('admin', 'admin');
   }
-}
+};
 
 let pollCount = 0;
 
@@ -127,7 +126,7 @@ const poll = async (token) => {
 
   pollCount += 1;
   try {
-    console.log("Polling: " + pollCount);
+    console.log('Polling: ' + pollCount);
     poll_();
   } finally {
     if (isActive) {
@@ -148,17 +147,24 @@ export default function () {
 
   router.post('/@test-push-notification', jsonParser, async (req, res) => {
     const subscription = req.body.subscription;
-    webPush.sendNotification(subscription)
-    .then(function() {
-      console.log('Push Application Server - Notification sent to ' + subscription.endpoint);
-    }).catch(function() {
-      console.log('ERROR in sending Notification, endpoint removed ' + subscription.endpoint);
-    });
+    webPush
+      .sendNotification(subscription)
+      .then(function () {
+        console.log(
+          'Push Application Server - Notification sent to ' +
+            subscription.endpoint,
+        );
+      })
+      .catch(function () {
+        console.log(
+          'ERROR in sending Notification, endpoint removed ' +
+            subscription.endpoint,
+        );
+      });
   });
 
   router.post('/@taskqueue', jsonParser, async (req, res) => {
-
-/* 
+    /* 
 
 POST /@taskqueue HTTP/1.1
 Accept: application/json
@@ -199,36 +205,34 @@ Location: /@taskqueue/id
 
     const payload = {
       ...req.body,
-      "@type": "task",
-      "user_id": jwtDecode(authToken).sub,
-      "title": req.body.portal_path,
+      '@type': 'task',
+      user_id: jwtDecode(authToken).sub,
+      title: req.body.portal_path,
     };
-    const queuePath = "/task-queue";
+    const queuePath = '/task-queue';
     const response = await superagent
-       .post(`${apiPath}${queuePath}`)
-       .set('Content-Type', 'application/json')
-       .set('Accept', 'application/json')
-       .send(payload)
-       .auth('admin', 'admin');
+      .post(`${apiPath}${queuePath}`)
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .send(payload)
+      .auth('admin', 'admin');
 
     // TODO: Check response?
 
     res.status(202);
-    res.set({'Location': location})
-    res.send("")
+    res.set({ Location: location });
+    res.send('');
   });
 
-//    console.log(req.body)
-//    res.status(202);
-//    res.set({'Location': location})
-//    res.send({"status": "ok"})
-//    return;
-
-
+  //    console.log(req.body)
+  //    res.status(202);
+  //    res.set({'Location': location})
+  //    res.send({"status": "ok"})
+  //    return;
 
   // For MVP:
   // POST /@taskqueue    -> returns 202 Accepted; Location /@taskqueue/id
-/*
+  /*
 
 ---
 
@@ -258,7 +262,7 @@ Content-Type: application/json
   // GET  /@taskqueue/id  -> returns ... Busy, 200 OK
   // DELETE  /@taskqueue/id  -> returns 204 No Content
 
-  controller.token = (new Date()).getTime();
+  controller.token = new Date().getTime();
   // setTimeout(() => poll(controller.token), 1000);
 
   return router;
